@@ -74,8 +74,23 @@ router.post("/", Middleware.isAuthenticated, async (req, res) => {
         }
 
         await client.query('COMMIT');
+
+        let returnItems = [];
+        for(let i = 0; i < order.items.length; i++) {
+            const { productid, quantity, price } = order.items[i];
+            returnItems.push({
+                idItem: productid,
+                quantidadeItem: quantity,
+                valorItem: price
+            });
+        }
     
-        Middleware.ok(res, order);
+        Middleware.ok(res, {
+            numeroPedido: order.orderid,
+            valorTotal: order.value,
+            dataCriacao: order.creationdate,
+            items: returnItems
+        });
     } catch (error) {
         await client.query('ROLLBACK');
         Middleware.error(res, 500, 'Failed to create order');
