@@ -17,7 +17,7 @@ var Middleware = {
     ok: (res, data = null) => {
         res.json({
             response: {
-                code: 0,
+                code: 200,
                 message: 'success'
             },
             data: data
