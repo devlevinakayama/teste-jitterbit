@@ -37,10 +37,34 @@ router.get("/", Middleware.isAuthenticated, async (req, res) => {
 
 router.get("/:id", Middleware.isAuthenticated, async (req, res) => {
     const client = await db.getInstance();
-    const response = await client.query('SELECT * from "order" where id = $1', [req.params.id]);
-    Middleware.ok(res, response.rows);
-}
-);
+    const response = await client.query('SELECT * from "order" where orderid = $1', [req.params.id]);
+
+    if(response.rows.length === 0) {
+        Middleware.error(res, 404, 'Order not found');
+        return;
+    }
+
+    const order = response.rows[0];
+    const responseItems = await client.query('SELECT * from items where orderid = $1', [order.orderid]);
+    order.items = responseItems.rows ?? [];
+
+    let items = [];
+    for(let j = 0; j < order.items.length; j++) {
+        const item = order.items[j];
+        items.push({
+            idItem: item.productid,
+            quantidadeItem: item.quantity,
+            valorItem: item.price
+        });
+    }
+
+    Middleware.ok(res, {
+        numeroPedido: order.orderid,
+        valorTotal: order.value,
+        dataCriacao: order.creationdate,
+        items: items
+    });
+});
 
 router.post("/", Middleware.isAuthenticated, async (req, res) => {
     const {numeroPedido, valorTotal, dataCriacao, items} = req.body;
