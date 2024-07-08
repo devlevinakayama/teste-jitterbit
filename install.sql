@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS public."order" (
-	orderid uuid NOT NULL,
+	orderid varchar(20) NOT NULL,
 	value float8 DEFAULT 0 NOT NULL,
 	creationdate timestamp NOT NULL,
 	CONSTRAINT orders_pk PRIMARY KEY (orderid)
