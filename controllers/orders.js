@@ -232,4 +232,35 @@ router.put("/:id", Middleware.isAuthenticated, async (req, res) => {
 
 });
 
+router.delete("/:id", Middleware.isAuthenticated, async (req, res) => {
+    const numeroPedido = req.params.id;
+
+    if (!numeroPedido) {
+        Middleware.error(res, 400, 'Missing parameters');
+        return;
+    }
+
+    const client = await db.getInstance();
+
+    const resCheck = await client.query('SELECT orderid from "order" where orderid = $1', [numeroPedido]);
+    if (resCheck.rows.length === 0) {
+        Middleware.error(res, 404, 'Order not found');
+        return;
+    }
+
+    try {
+        await client.query('BEGIN');
+
+        await client.query('DELETE FROM items WHERE orderid = $1', [numeroPedido]);
+        await client.query('DELETE FROM "order" WHERE orderid = $1', [numeroPedido]);
+
+        await client.query('COMMIT');
+
+        Middleware.ok(res);
+    } catch (error) {
+        await client.query('ROLLBACK');
+        Middleware.error(res, 500, 'Failed to delete order');
+    }
+});
+
 module.exports = router;
