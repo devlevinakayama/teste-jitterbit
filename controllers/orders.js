@@ -3,6 +3,7 @@ const Database = require("../db");
 const db = new Database();
 const Middleware = require("../middleware");
 
+// Rota responsável por listar todos os pedidos
 router.get("/", Middleware.isAuthenticated, async (req, res) => {
     const client = await db.getInstance();
     const response = await client.query('SELECT * from "order"');
@@ -35,6 +36,7 @@ router.get("/", Middleware.isAuthenticated, async (req, res) => {
     Middleware.ok(res, list);
 });
 
+// Rota responsável por buscar um pedido específico
 router.get("/:id", Middleware.isAuthenticated, async (req, res) => {
     const client = await db.getInstance();
     const response = await client.query('SELECT * from "order" where orderid = $1', [req.params.id]);
@@ -66,6 +68,7 @@ router.get("/:id", Middleware.isAuthenticated, async (req, res) => {
     });
 });
 
+// Rota responsável por criar um pedido
 router.post("/", Middleware.isAuthenticated, async (req, res) => {
     const { numeroPedido, valorTotal, dataCriacao, items } = req.body;
 
@@ -147,6 +150,7 @@ router.post("/", Middleware.isAuthenticated, async (req, res) => {
     }
 });
 
+// Rota responsável por atualizar um pedido
 router.put("/:id", Middleware.isAuthenticated, async (req, res) => {
     const numeroPedido = req.params.id;
     const { valorTotal, dataCriacao, items } = req.body;
@@ -232,6 +236,7 @@ router.put("/:id", Middleware.isAuthenticated, async (req, res) => {
 
 });
 
+// Rota responsável por deletar um pedido
 router.delete("/:id", Middleware.isAuthenticated, async (req, res) => {
     const numeroPedido = req.params.id;
 

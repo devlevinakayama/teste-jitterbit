@@ -4,16 +4,22 @@
  * @version 1.0.0
  */
 class Database {
+    /**
+     * Construtor da classe
+     */
     constructor(){
         this.pool = null;
     }
+
+    /**
+     * Método responsável por criar a conexão com o banco de dados, caso já existir uma conexão, a mesma é retornada
+     * 
+     * @returns {Promise} Retorna uma conexão com o banco de dados
+     */
     async getInstance(){
-        if(this.pool !== null){
-            console.log('utilizou a o pool já criado');
+        if(this.pool !== null) 
             return this.pool.connect();
-        }
      
-        console.log(process.env.CONNECTION_STRING);
         const { Pool } = require('pg');
         this.pool = new Pool({
             connectionString: process.env.CONNECTION_STRING

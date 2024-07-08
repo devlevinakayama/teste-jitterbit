@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const jwt = require('jsonwebtoken');
 
+// Rota responsável por autenticar o usuário
 router.post("/", async (req, res) => {
     const { username, password } = req.body;
     if(username === 'user' && password === 'pass'){
