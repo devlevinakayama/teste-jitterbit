@@ -6,7 +6,33 @@ const Middleware = require("../middleware");
 router.get("/", Middleware.isAuthenticated, async (req, res) => {
     const client = await db.getInstance();
     const response = await client.query('SELECT * from "order"');
-    Middleware.ok(res, response.rows);
+
+    let list = [];
+    let orders = response.rows ?? [];
+    for(let i = 0; i < orders.length; i++) {
+        const order = orders[i];
+        const responseItems = await client.query('SELECT * from items where orderid = $1', [order.orderid]);
+        order.items = responseItems.rows ?? [];
+
+        let items = [];
+        for(let j = 0; j < order.items.length; j++) {
+            const item = order.items[j];
+            items.push({
+                idItem: item.productid,
+                quantidadeItem: item.quantity,
+                valorItem: item.price
+            });
+        }
+
+        list.push({
+            numeroPedido: order.orderid,
+            valorTotal: order.value,
+            dataCriacao: order.creationdate,
+            items: items
+        });
+    }
+    
+    Middleware.ok(res, list);
 });
 
 router.get("/:id", Middleware.isAuthenticated, async (req, res) => {
