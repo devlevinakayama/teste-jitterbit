@@ -2,12 +2,10 @@ require("dotenv").config();
 const express = require('express')
 const app = express()
 const port = 3000
-const Database = require('./db')
-const db = new Database();
+const orders = require('./controllers/orders')
 
-app.get('/orders', (req, res) => {
-  
-})
+app.use(express.json());
+app.use('/orders', orders);
 
 app.listen(port, async () => {
   console.log(`Start app listening on port ${port}`)
