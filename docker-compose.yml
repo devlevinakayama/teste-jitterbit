@@ -1,5 +1,15 @@
 version: '3.7'
 services:
+  nodejs:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+    depends_on:
+      - db
   db:
     image: postgres:latest
     environment:
