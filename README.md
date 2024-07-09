@@ -18,5 +18,5 @@ Teste Jitterbit
 2. Tenha certeza que as portas 3000, 3001 e 5432 do banco estejam disponíveis, caso não troque de acordo com a necessidade.
 
 ## Como acessar ?
-- Para testar o backend, existe um collection na pasta **server** que aponta para **http://localhost:3000** que pode ser usado para tetar os endpoints
+- Para testar o backend, existe um collection na pasta **server** que aponta para **http://localhost:3000** que pode ser usado para testar os endpoints
 - Para testar o front, basta acessar **http://localhost:3001**
