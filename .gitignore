@@ -1,2 +1,4 @@
 server/node_modules/
 .vscode/
+server/cache/*
+!server/cache/.gitkeep
