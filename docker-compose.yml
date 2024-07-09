@@ -1,6 +1,6 @@
 version: '3.7'
 services:
-  nodejs:
+  api:
     build:
       context: ./server
       dockerfile: Dockerfile
@@ -20,4 +20,9 @@ services:
       - "5432:5432"
     volumes:
       - ./.db:/var/lib/postgresql/data
-  
+  front:
+    image: httpd:latest
+    ports:
+      - "3001:80"
+    volumes:
+      - ./front:/usr/local/apache2/htdocs
