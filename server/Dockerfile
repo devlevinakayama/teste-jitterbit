@@ -13,6 +13,8 @@ RUN npm install
 # Copiando o restante dos arquivos para a pasta de trabalho
 COPY . .
 
+RUN chmod a+rwx cache
+
 # Expõe a porta 3000
 EXPOSE 3000
 
